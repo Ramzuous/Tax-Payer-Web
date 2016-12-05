@@ -3,10 +3,10 @@
     require_once 'connect.php';
 
     $connection = new mysqli($host, $db_user, $db_password, $db_name);
-    
+ 
+    /*if(isset($_POST['postincomme']) && isset($_POST['postincommeCosts']) && 
+            isset($_POST['postsocial']) && isset($_POST['posthealth'])){*/
     try{
-        
-
         
         function getTaxFreePayment($id, $connection){
             
@@ -20,15 +20,20 @@
             return $value;
         }
 
-
-
-
+        $line = 0.0;  
+        $prog=0.0;
         $incomme = $_POST['incomme'];
         $incommeCosts = $_POST['incommeCosts'];
         $social = $_POST['social'];
         $health = $_POST['health'];
-        
-        //echo $incomme.'<br/>'.$incommeCosts.'<br/>'.$social.'<br/>'.$health;
+
+/*
+        $incomme = $_POST['postincomme'];
+        $incommeCosts = $_POST['postincommeCosts'];
+        $social = $_POST['postsocial'];
+        $health = $_POST['posthealth'];
+        */
+        //echo $incomme.'<br/>'.$incommeCosts.'<br/>'.$social.'<br/>'.$health.'<br/>';
         
         $payment = $incomme - $social - $incommeCosts;
         
@@ -55,15 +60,15 @@
             $downPayment[$countDatas] = $row['downPayment'];
             $maxPayment[$countDatas] = $row['maxPayment'];
             $freeTaxPayId[$countDatas] = $row['freetaxvalue_idfreetaxvalue'];
-            
+            //echo $values[$countDatas];
             $result->free();
             $countDatas++;
+            
         }
 
         
-        
         for($j=0; $j<$countDatas; $j++){
-            /*echo $values[$j].' '.$guaranteedAmount[$j].' '.$downPayment[$j].' '
+           /* echo $values[$j].' '.$guaranteedAmount[$j].' '.$downPayment[$j].' '
                     .$maxPayment[$j].' '.$freeTaxPayId[$j].'</br/>';*/
             
             
@@ -72,7 +77,6 @@
                         $prog = ($guaranteedAmount[$j] + ($payment - $downPayment[$j] -
                         getTaxFreePayment($freeTaxPayId[$j], $connection)) * $values[$j]) - $health;
                         $taxProg = $values[$j];
-
                     }
                     else if ($maxPayment[$j] == 0 && $downPayment[$j] == 0)
                     {//liniowy podatek
@@ -99,21 +103,33 @@
 
         }
         
+        $prog = round($prog);
+        $line = round($line);
+        
         if ($prog < $line)
         {
-            echo $prog.'<br/>';
-            echo $taxProg;
+            //echo $prog.'<br/>';
+            //echo $taxProg;
+            $_SESSION['resultValue'] = $prog;
+            $_SESSION['resultTax'] = $taxProg;
+            header('Location: index.php');
         }
         else if($prog > $line)
         {
-            echo $line.'<br/>';
-            echo $taxLine;
+            $_SESSION['resultValue'] = $line;
+            $_SESSION['resultTax'] = $taxLine;
+            //echo $line.'<br/>';
+            //echo $taxLine;
+            header('Location: index.php');
         }
         else
         {
-            echo $prog.'<br/>';
-            echo $taxProg;
-        }
+            $_SESSION['resultValue'] = $prog;
+            $_SESSION['resultTax'] = $taxProg;
+            //echo $prog.'<br/>';
+            //echo $taxProg;
+            header('Location: index.php');
+        }        
         
         
         
@@ -121,7 +137,9 @@
         echo $e;
     }
 
-    
+            /*} else {
+                echo 'brak danych';
+}*/
 
 
 ?>

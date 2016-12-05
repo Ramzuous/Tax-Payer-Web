@@ -17,6 +17,7 @@ require_once 'connect.php';
 
         $log = $_POST['login'];
         $pass = $_POST['pass'];
+        
         ///////////////////////////////////////////
         //zabezpiecznie przed sql injection
         $log = htmlentities($log, ENT_QUOTES, "UTF-8");
@@ -60,7 +61,7 @@ require_once 'connect.php';
             }else{
                 $_SESSION['error'] = '<span class="error">Nieprawidłowy '
                         . 'e-mail lub hasło!</span>';
-						
+			echo 'bląd';			
                 header('Location: admin.php');
                 }
             }

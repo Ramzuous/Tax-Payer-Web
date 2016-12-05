@@ -59,3 +59,13 @@ body{
 .form-group{
     text-align: center;
 }
+
+.panel-body{
+    height: 40%;
+    font-weight: bold;
+}
+
+#result{
+    font-weight: bold;
+    font-size: 10px;
+}
