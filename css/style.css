@@ -52,7 +52,7 @@ body{
 }
 
 .form-control{
-    width: 50%;
+    width: 30%;
     margin: auto;
 }
 
@@ -63,9 +63,4 @@ body{
 .panel-body{
     height: 40%;
     font-weight: bold;
-}
-
-#result{
-    font-weight: bold;
-    font-size: 10px;
 }

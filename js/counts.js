@@ -1,17 +1,21 @@
-  function showResult(incomme, incommeCosts, social, health){
-                if(incomme=="" && incommeCosts=="" && social=="" && health==""){
-                    document.getElementById("button").innerHTML="";
-                    return;
-                } else{
-                    document.getElementById("result").innerHTML=" "+incomme+" "
-                            +incommeCosts+" "+social+" "+health;
-                    /*if(window.XMLHttpRequest){
+        function showResult(){
+                
+                var incomme = $('#incomme').val();
+                var incommeCosts = $('#incommeCosts').val();
+                var social = $('#social').val();
+                var health = $('#health').val();
+                
+                //document.getElementById('#result').innerHTML = incomme;
+                
+                
+                    
+                    if(window.XMLHttpRequest){
                         xmlhttp = new XMLHttpRequest();
                     } else {
                         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
                     }
                     
-                    $.post('count.php', {
+                    $.post('getDatas.php', {
                         postincomme: incomme,
                         postincommeCosts: incommeCosts,
                         postsocial: social,
@@ -21,8 +25,6 @@
                         $('#result').html(data);
                     }
                     
-                    );*/
-                    
-                    
-                }
+                    );
+
             }

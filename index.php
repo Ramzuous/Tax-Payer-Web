@@ -5,25 +5,14 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
         header('Location: adminpanel.php');
         exit();//opuszczanie skryptu
         }
-        
-        require_once 'connect.php';
+    require_once 'getDatas.php';
+        /*
+    require_once 'connect.php';
 
-    $connection = new mysqli($host, $db_user, $db_password, $db_name);
- 
-    /*if(isset($_POST['postincomme']) && isset($_POST['postincommeCosts']) && 
-            isset($_POST['postsocial']) && isset($_POST['posthealth'])){*/
-  if(isset($_POST['incomme'])){  
+    $connection = new mysqli($host, $db_user, $db_password, $db_name);    
 
-    try{
-        
-        function setProcent($value){
-            
-            $result = $value*100;
-            $result = $result.'%';
-            return $result;
-            
-        }
-        
+if(isset($_POST['incomme'])){    
+    try{    
         function getTaxFreePayment($id, $connection){
             
             $result = $connection->query("SELECT * FROM freetaxvalue WHERE idfreetaxvalue = '$id'");
@@ -38,18 +27,12 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
 
         $line = 0.0;  
         $prog=0.0;
+        $incomme = $_POST['incomme'];
+        $incommeCosts = $_POST['incommeCosts'];
+        $social = $_POST['social'];
+        $health = $_POST['health'];
+
         
-            $incomme = $_POST['incomme'];
-            $incommeCosts = $_POST['incommeCosts'];
-            $social = $_POST['social'];
-            $health = $_POST['health'];
-        
-/*
-        $incomme = $_POST['postincomme'];
-        $incommeCosts = $_POST['postincommeCosts'];
-        $social = $_POST['postsocial'];
-        $health = $_POST['posthealth'];
-        */
         //echo $incomme.'<br/>'.$incommeCosts.'<br/>'.$social.'<br/>'.$health.'<br/>';
         
         $payment = $incomme - $social - $incommeCosts;
@@ -77,7 +60,7 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
             $downPayment[$countDatas] = $row['downPayment'];
             $maxPayment[$countDatas] = $row['maxPayment'];
             $freeTaxPayId[$countDatas] = $row['freetaxvalue_idfreetaxvalue'];
-            //echo $values[$countDatas];
+
             $result->free();
             $countDatas++;
             
@@ -85,9 +68,6 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
 
         
         for($j=0; $j<$countDatas; $j++){
-           /* echo $values[$j].' '.$guaranteedAmount[$j].' '.$downPayment[$j].' '
-                    .$maxPayment[$j].' '.$freeTaxPayId[$j].'</br/>';*/
-            
             
             if ($maxPayment[$j] >= $payment && $downPayment[$j] < $payment)
                     {//progresja - pośrednie podatki
@@ -118,44 +98,40 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
                         $line = 0;
                     }
 
+            }
+
+            $prog = round($prog);
+            $line = round($line);
+
+            if ($prog < $line)
+            {
+
+                $resultValue = $prog;
+                $resultTax = $taxProg;
+
+
+            }
+            else if($prog > $line)
+            {
+                $resultValue = $line;
+                $resultTax = $taxLine;
+                
+
+            }
+            else
+            {
+                $resultValue = $prog;
+                $resultTax = $taxProg;
+
+
+            }     
+
+
+
+        }catch(Exception $e){
+            echo $e;
         }
         
-        $prog = round($prog);
-        $line = round($line);
-        
-        if ($prog < $line)
-        {
-            //echo $prog.'<br/>';
-            //echo $taxProg;
-            $resultValue = $prog;
-            $resultTax = setProcent($taxProg);
-            
-        }
-        else if($prog > $line)
-        {
-            $resultValue = $line;
-            $resultTax = setProcent($taxLine);
-            //echo $line.'<br/>';
-            //echo $taxLine;
-            
-        }
-        else
-        {
-            $resultValue = $prog;
-            $resultTax = setProcent($taxProg);
-            //echo $prog.'<br/>';
-            //echo $taxProg;
-            
-        }        
-        
-        
-        
-    }catch(Exception $e){
-        echo $e;
-    }
-  }
-            /*} else {
-                echo 'brak danych';
 }*/
 
 ?>
@@ -163,31 +139,19 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
 <html>
     <head>
         <meta charset="UTF-8">
-        
-            <meta charset="utf-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-           <?php  //<meta http-equiv="Refresh" content="60"/> ?>
-
-            <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-            <!-- Bootstrap -->
-            <link href="css/bootstrap.min.css" rel="stylesheet">     
-            <script src="js/jquery.js"></script>
-            <!-- Include all compiled plugins (below), or include individual files as needed -->
-            <script src="js/bootstrap.min.js"></script>
-
-
-    
-        <title>PodatniX - Twoje obliczanie podatku</title>
-        
-        
-        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="keywords" content="paliwo spalanie pojazdy licznik kalkulator baza danych"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrom=1"/>
+
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">     
+        <script src="js/jquery.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
         
+        <title>PodatniX - Twoje obliczanie podatku</title>
+
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
-        <script type="text/javascript" src="js/counts.js"></script>
         
     </head>
     <body>
@@ -200,35 +164,33 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
         
         
         <div class="well">
-            <form  method="post" >
-                <!--  action="count.php" -->
+            <form method="post">
+                
             <br/>
             <br/>
         
             <div class="form-group"> 
                  <label for="incomme">Podaj swoje przychody:</label>
-                 <input type="number" class="form-control" id="incomme" 
-                        value="0.00" min="0" name="incomme">
+                 <input type="number" class="form-control" id="incomme" name="incomme"
+                        value="0.00" min="0">
             </div>
             <div class="form-group"> 
                  <label for="incommeCosts">Podaj koszty uzyskania swoich dochodów:</label>
-                 <input type="number" class="form-control" id="incommCosts" 
-                        value="0.00" min="0" name="incommeCosts">
+                 <input type="number" class="form-control" id="incommeCosts" name="incommeCosts" 
+                        value="0.00" min="0">
             </div>
             <div class="form-group"> 
                  <label for="social">Podaj koszty ubezpieczenia społecznego:</label>
-                 <input type="number" class="form-control" id="social" 
-                        value="0.00" min="0" name="social">
+                 <input type="number" class="form-control" id="social" name="social"
+                        value="0.00" min="0">
             </div>
             <div class="form-group"> 
                  <label for="health">Podaj koszty ubezpieczenia zdrowotnego:</label>
-                 <input type="number" class="form-control" id="health" 
-                        value="0.00" min="0" name="health">
+                 <input type="number" class="form-control" id="health" name="health" 
+                        value="0.00" min="0">
             </div>
-            <input type="submit" value="Oblicz" id="button" class="btn btn-info btn-lg"
-                  />
-            <!--  onclick="showResult(incomme.value, incommeCosts.value, 
-                               social.value, health.value)"-->
+            <input type="submit" value="Oblicz" id="countButton" class="btn btn-info btn-lg"/>
+
             
             </form>
             <br/>
@@ -257,11 +219,7 @@ if((isset($_SESSION['loged'])) && ($_SESSION['loged']==true)){
                         
                     }
                 
-                    /*if(isset($_SESSION['resultValue']) && isset($_SESSION['resultTax'])){
-                    
-                    echo $_SESSION['resultValue'].'<br/>';
-                    echo $_SESSION['resultTax'];
-                    }*/
+                   
                 ?>
             </div>
             

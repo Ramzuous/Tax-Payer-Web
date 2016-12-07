@@ -3,9 +3,10 @@
     require_once 'connect.php';
 
     $connection = new mysqli($host, $db_user, $db_password, $db_name);
- 
-    /*if(isset($_POST['postincomme']) && isset($_POST['postincommeCosts']) && 
+
+    /*if(isset($_POST['postincomme']) && isset($_POST['postincommeCosts'])  && 
             isset($_POST['postsocial']) && isset($_POST['posthealth'])){*/
+if(isset($_POST['incomme'])){
     try{
         
         function getTaxFreePayment($id, $connection){
@@ -19,7 +20,15 @@
             
             return $value;
         }
-
+        
+        function setProcents($value){
+            
+            $result = 100*$value;
+            $result=$result.'%';
+            
+            return $result;
+        }
+        
         $line = 0.0;  
         $prog=0.0;
         $incomme = $_POST['incomme'];
@@ -27,7 +36,7 @@
         $social = $_POST['social'];
         $health = $_POST['health'];
 
-/*
+        /*
         $incomme = $_POST['postincomme'];
         $incommeCosts = $_POST['postincommeCosts'];
         $social = $_POST['postsocial'];
@@ -68,27 +77,25 @@
 
         
         for($j=0; $j<$countDatas; $j++){
-           /* echo $values[$j].' '.$guaranteedAmount[$j].' '.$downPayment[$j].' '
-                    .$maxPayment[$j].' '.$freeTaxPayId[$j].'</br/>';*/
             
             
             if ($maxPayment[$j] >= $payment && $downPayment[$j] < $payment)
                     {//progresja - pośrednie podatki
                         $prog = ($guaranteedAmount[$j] + ($payment - $downPayment[$j] -
                         getTaxFreePayment($freeTaxPayId[$j], $connection)) * $values[$j]) - $health;
-                        $taxProg = $values[$j];
+                        $taxProg = setProcents($values[$j]);
                     }
                     else if ($maxPayment[$j] == 0 && $downPayment[$j] == 0)
                     {//liniowy podatek
                         $line = ($guaranteedAmount[$j] + ($payment - $downPayment[$j] -
                         getTaxFreePayment($freeTaxPayId[$j], $connection)) * $values[$j]) - $health;
-                        $taxLine = $values[$j];
+                        $taxLine = setProcents($values[$j]);
                     }
                     else if($maxPayment[$j]==0 && $downPayment[$j] != 0 && $payment>$downPayment[$j])
                     {//progresja - najwyższa stawka
                         $prog = ($guaranteedAmount[$j] + ($payment - $downPayment[$j] -
                         getTaxFreePayment($freeTaxPayId[$j], $connection)) * $values[$j]) - $health;
-                        $taxProg = $values[$j];
+                        $taxProg = setProcents($values[$j]);
                     }
 
                     if ($prog < 0)
@@ -101,45 +108,36 @@
                         $line = 0;
                     }
 
+            }
+
+            $prog = round($prog);
+            $line = round($line);
+
+            if ($prog < $line)
+            {
+
+                $resultValue = $prog;
+                $resultTax = $taxProg;
+
+
+            }
+            else if($prog > $line)
+            {
+                $resultValue = $line;
+                $resultTax = $taxLine;
+
+            }
+            else
+            {
+                $resultValue = $prog;
+                $resultTax = $taxProg;
+
+
+            }     
+
+        }catch(Exception $e){
+            echo $e;
         }
-        
-        $prog = round($prog);
-        $line = round($line);
-        
-        if ($prog < $line)
-        {
-            //echo $prog.'<br/>';
-            //echo $taxProg;
-            $_SESSION['resultValue'] = $prog;
-            $_SESSION['resultTax'] = $taxProg;
-            header('Location: index.php');
-        }
-        else if($prog > $line)
-        {
-            $_SESSION['resultValue'] = $line;
-            $_SESSION['resultTax'] = $taxLine;
-            //echo $line.'<br/>';
-            //echo $taxLine;
-            header('Location: index.php');
-        }
-        else
-        {
-            $_SESSION['resultValue'] = $prog;
-            $_SESSION['resultTax'] = $taxProg;
-            //echo $prog.'<br/>';
-            //echo $taxProg;
-            header('Location: index.php');
-        }        
-        
-        
-        
-    }catch(Exception $e){
-        echo $e;
     }
-
-            /*} else {
-                echo 'brak danych';
-}*/
-
 
 ?>

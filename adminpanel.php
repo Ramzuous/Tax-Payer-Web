@@ -48,13 +48,17 @@ if(!isset($_SESSION['loged'])){
         <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">WebSiteName</a>
+      <a class="navbar-brand" href="index.php">PodatniX</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Page 1</a></li>
-      <li><a href="#">Page 2</a></li>
-      <li><a href="#">Page 3</a></li>
+      <li><a href="#">Dodaj stawkę podatku</a></li>
+      <li><a href="#">Edytuj stawkę podatkową</a></li>
+      <li><a href="#">Dodaj kwotę wolną</a></li>
+      <li><a href="#">Edytuj kwotę wolną</a></li>
+      <li><a href="#">Aktywuj próg</a></li>
+      <li><a href="#">Dodaj administratora</a></li>
+      <li><a href="#">Edytuj swoje konto</a></li>
+      <li><a href="logout.php">Wyloguj się</a></li>
     </ul>
   </div>
 </nav>
@@ -63,7 +67,7 @@ if(!isset($_SESSION['loged'])){
         
         
         <div class="well">
-            <a href="logout.php">Wyloguj się</a>
+            
             
         </div>
   
