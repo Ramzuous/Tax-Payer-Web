@@ -1,10 +1,10 @@
-        function showResult(){
-                
+        function showTables(value){
+                /*
                 var incomme = $('#incomme').val();
                 var incommeCosts = $('#incommeCosts').val();
                 var social = $('#social').val();
                 var health = $('#health').val();
-                
+                */
                 //document.getElementById('#result').innerHTML = incomme;
                 
                 
@@ -15,14 +15,15 @@
                         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
                     }
                     
-                    $.post('getDatas.php', {
-                        postincomme: incomme,
+                    $.post('getTables.php', {
+                        postvalue: value
+                        /*postincomme: incomme,
                         postincommeCosts: incommeCosts,
                         postsocial: social,
-                        posthealth: health
+                        posthealth: health*/
                     }, 
                     function(data){
-                        $('#result').html(data);
+                        $('#tables').html(data);
                     }
                     
                     );
