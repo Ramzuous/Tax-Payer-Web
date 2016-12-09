@@ -10,6 +10,7 @@ if(!isset($_SESSION['loged'])){
 
     require_once 'getDatas.php';
     require_once 'insertDatas.php';
+    require_once 'editDatas.php';
     
 ?>
 <!DOCTYPE html>
@@ -47,11 +48,11 @@ if(!isset($_SESSION['loged'])){
                     <ul class="nav navbar-nav">
                         <li><a href="#addTax" data-toggle="modal">Dodaj stawkę podatku</a></li>
                         <li><a href="#" data-toggle="modal">Edytuj stawkę podatkową</a></li>
-                        <li><a href="#" data-toggle="modal">Dodaj kwotę wolną</a></li>
-                        <li><a href="#" data-toggle="modal">Edytuj kwotę wolną</a></li>
-                        <li><a href="#" data-toggle="modal">Aktywuj próg</a></li>
-                        <li><a href="#" data-toggle="modal">Dodaj administratora</a></li>
-                        <li><a href="#" data-toggle="modal">Edytuj swoje konto</a></li>
+                        <li><a href="#addFreePay" data-toggle="modal">Dodaj kwotę wolną</a></li>
+                        <li><a href="#editFreePayment" data-toggle="modal">Edytuj kwotę wolną</a></li>
+                        <li><a href="#reactiveTax" data-toggle="modal">Aktywuj próg</a></li>
+                        <li><a href="#addAdmin" data-toggle="modal">Dodaj administratora</a></li>
+                        <li><a href="#editAdmin" data-toggle="modal">Edytuj swoje konto</a></li>
                         <li><a href="logout.php">Wyloguj się</a></li>
                     </ul>
                 </div>
@@ -59,10 +60,11 @@ if(!isset($_SESSION['loged'])){
         
         <div class="main">
         <!-- modals -->
-            <!-- Modal -->
+            
+        <!--dodawanie podatków-->
             <div class="modal fade" id="addTax" role="dialog">
                 <div class="modal-dialog">
-                  <!-- Modal content-->
+                  
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -74,29 +76,29 @@ if(!isset($_SESSION['loged'])){
 
                                  <label for="value">Podaj stawkę podatku:</label>
                                  <input type="number" class="form-control" id="value" name="value"
-                                        value="0.00" min="0" step="0.1" max="1">
+                                        value="0.00" min="0" step="0.01" max="1">
                             </div>
                             <div class="form-group"> 
 
                                  <label for="guaranteedAmount">Podaj podstawę podatkową:</label>
                                  <input type="number" class="form-control" id="guaranteedAmount" 
-                                        name="guaranteedAmount" value="0.00" min="0">
+                                        name="guaranteedAmount" value="0.00" min="0"  step="0.01">
                             </div>
                             <div class="form-group"> 
 
                                  <label for="downPayment">Podaj dolną granicę podatku:</label>
                                  <input type="number" class="form-control" id="downPayment" 
-                                        name="downPayment" value="0.00" min="0">
+                                        name="downPayment" value="0.00" min="0"  step="0.01">
                             </div>
                             <div class="form-group"> 
 
                                  <label for="maxPayment">Podaj górną granicę podatku:</label>
                                  <input type="number" class="form-control" id="maxPayment" 
-                                        name="maxPayment" value="0.00" min="0">
+                                        name="maxPayment" value="0.00" min="0"  step="0.01">
                             </div>
                             <div class="form-group"> 
 
-                                 <label for="freePay">Podaj górną granicę podatku:</label>
+                                 <label for="freePay">Przypisz kwotę wolną od podatku:</label>
                                  <select class="form-control" id="freePayValue" name="freePayValue">
                                      <?php 
                                      for($i=0; $i<$countDatasFree; $i++){
@@ -105,7 +107,65 @@ if(!isset($_SESSION['loged'])){
                                      ?>
                                  </select>
                             </div>
-                            <input type="submit" value="dodaj" class="btn btn-info btn-lg"/>
+                            <input type="submit" value="Dodaj" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        
+         <div class="modal fade" id="addFreePay" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Dodaj kwotę wolną</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="form-group"> 
+
+                                 <label for="freePayment">Podaj kwotę wolną:</label>
+                                 <input type="number" class="form-control" id="freePayment" 
+                                        name="freePayment" value="0.00" min="0" step="0.01">
+                            </div>
+                            
+                            <input type="submit" value="Dodaj" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        
+            <div class="modal fade" id="addAdmin" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Dodaj administratora</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="form-group"> 
+
+                                 <label for="addLogin">Podaj login:</label>
+                                 <input type="text" class="form-control" id="addLogin" 
+                                        name="addLogin">
+                            </div>
+                             <div class="form-group"> 
+                                 <label for="addPass">Podaj hasło:</label>
+                                 <input type="password" class="form-control" id="addPass" 
+                                        name="addPass">
+                            </div>
+                            <input type="submit" value="Dodaj" class="btn btn-info btn-lg"/>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -115,6 +175,110 @@ if(!isset($_SESSION['loged'])){
                 </div>
             </div>
             
+             <div class="modal fade" id="editAdmin" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Edytuj swoje konto</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group"> 
+                                 <label><?php echo 'Obecny Login: '. $_SESSION['login']; ?></label>
+                            </div>
+                        <form method="post">
+                            <div class="form-group"> 
+                                 <label for="editLogin">Podaj nowy login:</label>
+                                 <input type="text" class="form-control" id="editLogin" 
+                                        name="editLogin">
+                            </div>
+                            <input type="submit" value="Edytuj login" class="btn btn-info btn-sm"/>
+                        </form>
+                        <br/>
+                        <br/>
+                        <form method="post">
+                             <div class="form-group"> 
+                                 <label for="editPass">Podaj nowe hasło:</label>
+                                 <input type="password" class="form-control" id="editPass" 
+                                        name="editPass">
+                            </div>
+                            <input type="submit" value="Edytuj hasło" class="btn btn-info btn-sm"/>
+                        </form>
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        
+            <div class="modal fade" id="editFreePayment" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Edytuj kwotę wolną od podatku</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="form-group"> 
+                                 <label for="freePayForEdit">Wybierz kwotę wolną do edycji:</label>
+                                 <select class="form-control" id="freePayForEdit" name="freePayForEdit">
+                                     <?php 
+                                     for($i=0; $i<$countDatasFree; $i++){
+                                         echo'<option>'.$freePay[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                            <div class="form-group"> 
+                                 <label for="editFreePaymentValue">Podaj nową kwotę wolną:</label>
+                                 <input type="number" class="form-control" id="editFreePaymentValue" 
+                                        name="editFreePaymentValue" min="0" step="0.01">
+                            </div>
+                            <input type="submit" value="Edytuj kwotę wolną" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            
+            <div class="modal fade" id="reactiveTax" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Aktywuj ponownie kwotę podatkową</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post">
+                            <div class="form-group"> 
+                                 <label for="idTaxForReactive">Wybierz id podatku do reaktywacji:</label>
+                                 <select class="form-control" id="idTaxForReactive" name="idTaxForReactive">
+                                     <?php 
+                                     for($i=0; $i<$countDatas32; $i++){
+                                         echo'<option>'.$idtaxes32[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                            
+                            <input type="submit" value="Aktywuj ponownie" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
             
         
             <div class="well" id="tables">
@@ -134,15 +298,15 @@ if(!isset($_SESSION['loged'])){
                         </thead>
                         <tbody>
                             <?php 
-                            for($i=0; $i<$countDatas; $i++){
+                            for($i=0; $i<$countDatas2; $i++){
                             echo '<tr>    
-                                    <td>'.$idtaxes[$i].'</td>
-                                    <td>'.$values[$i].'</td>
-                                    <td>'.$guaranteedAmount[$i].'</td>
-                                    <td>'.$downPayment[$i].'</td>
-                                    <td>'.$maxPayment[$i].'</td>
-                                    <td>'.$flagT[$i].'</td>
-                                    <td>'.$freeTaxPayId[$i].'</td>
+                                    <td>'.$idtaxes2[$i].'</td>
+                                    <td>'.$values2[$i].'</td>
+                                    <td>'.$guaranteedAmount2[$i].'</td>
+                                    <td>'.$downPayment2[$i].'</td>
+                                    <td>'.$maxPayment2[$i].'</td>
+                                    <td>'.$flagT2[$i].'</td>
+                                    <td>'.$freeTaxPayId2[$i].'</td>
                                 </tr>';
                             }
                             ?>                     

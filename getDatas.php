@@ -55,6 +55,57 @@
             
         }
         
+        $countDatas2 = 0;
+        for($i=1; $i<=$allTaxesRows; $i++){
+            
+            
+            $result = $connection->query("SELECT * FROM taxes WHERE idtaxes='$i'");
+            
+            $row = $result->fetch_assoc();
+            
+            $idtaxes2[$countDatas2] = $row['idtaxes'];
+            $values2[$countDatas2] = $row['value'];
+            $guaranteedAmount2[$countDatas2] = $row['guaranteedAmount'];
+            $downPayment2[$countDatas2] = $row['downPayment'];
+            $maxPayment2[$countDatas2] = $row['maxPayment'];
+            $flagT2[$countDatas2] = $row['flagT'];
+            $freeTaxPayId2[$countDatas2] = $row['freetaxvalue_idfreetaxvalue'];
+
+            $result->free();
+            $countDatas2++;
+            
+        }
+        
+        $countDatas3 = 0;
+        $countDatas32 = 0;
+        for($i=1; $i<=$allTaxesRows; $i++){
+            
+            
+            $result = $connection->query("SELECT * FROM taxes WHERE flagT=0 AND "
+                    . "idtaxes='$i'");
+            
+            $row = $result->fetch_assoc();
+            
+            $idtaxes3[$countDatas3] = $row['idtaxes'];
+            $values3[$countDatas3] = $row['value'];
+            $guaranteedAmount3[$countDatas3] = $row['guaranteedAmount'];
+            $downPayment3[$countDatas3] = $row['downPayment'];
+            $maxPayment3[$countDatas3] = $row['maxPayment'];
+            $flagT3[$countDatas3] = $row['flagT'];
+            $freeTaxPayId3[$countDatas3] = $row['freetaxvalue_idfreetaxvalue'];
+
+            $result->free();
+            
+            if($idtaxes3[$countDatas3]!=NULL){
+                $idtaxes32[$countDatas32] = $idtaxes3[$countDatas3];
+                $countDatas32++;
+            }
+            
+            $countDatas3++;
+
+            
+        }
+        
         
         
         $result = $connection->query("SELECT * FROM freetaxvalue");
