@@ -47,7 +47,7 @@ if(!isset($_SESSION['loged'])){
                     </div>
                     <ul class="nav navbar-nav">
                         <li><a href="#addTax" data-toggle="modal">Dodaj stawkę podatku</a></li>
-                        <li><a href="#" data-toggle="modal">Edytuj stawkę podatkową</a></li>
+                        <li><a href="#editTax" data-toggle="modal">Edytuj stawkę podatkową</a></li>
                         <li><a href="#addFreePay" data-toggle="modal">Dodaj kwotę wolną</a></li>
                         <li><a href="#editFreePayment" data-toggle="modal">Edytuj kwotę wolną</a></li>
                         <li><a href="#reactiveTax" data-toggle="modal">Aktywuj próg</a></li>
@@ -279,7 +279,283 @@ if(!isset($_SESSION['loged'])){
                   </div>
                 </div>
             </div>
+        
+            <div class="modal fade" id="editTax" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Edytuj podatek</h4>
+                    </div>
+                    <div class="modal-body">
+                            <div class="form-group"> 
+                                 <button type="button" class="btn btn-info btn-lg" 
+                                         data-toggle="modal" data-target="#editValueModal">
+                                     Edytuj stawkę podatku</button>
+                        
+                            </div>
+                            <div class="form-group"> 
+                                   <button type="button" class="btn btn-info btn-lg" 
+                                         data-toggle="modal" data-target="#editGuaranteedAmountModal">
+                                       Edytuj podstawę podatkową</button>
+                            </div>
+                            <div class="form-group"> 
+                                <button type="button" class="btn btn-info btn-lg" 
+                                         data-toggle="modal" data-target="#editDownPaymentModal">
+                                       Edytuj dolną granicę podatku</button>
+                            </div>
+                            <div class="form-group"> 
+                                <button type="button" class="btn btn-info btn-lg" 
+                                         data-toggle="modal" data-target="#editMaxPaymentModal">
+                                       Edytuj górną granicę podatku</button>
+
+                            </div>
+                            <div class="form-group"> 
+                                <button type="button" class="btn btn-info btn-lg" 
+                                         data-toggle="modal" data-target="#editFreePayModal">
+                                       Przypisz inną kwotę wolną</button>
+                            </div>
+                             <div class="form-group"> 
+                                <button type="button" class="btn btn-danger btn-lg" 
+                                         data-toggle="modal" data-target="#deleteTaxModal">
+                                       Usuń podatek</button>
+                            </div>
+                            
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+                
+            <div class="modal fade" id="editValueModal" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Edytuj stawkę podatkową</h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <form method="post">
+                            <div class="form-group"> 
+
+                                <label for="getIdTax">Wybierz podatek do edycji:</label>
+                                 <select class="form-control" id="getIdTax" name="getIdTax">
+                                     <?php 
+                                     for($i=0; $i<$countDatas1; $i++){
+                                         echo'<option>'.$idtaxes1[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                           
+                            <div class="form-group"> 
+
+                                 <label for="editValue">Podaj nową stawkę podatku:</label>
+                                 <input type="number" class="form-control" id="editValue" name="editValue"
+                                        value="0.00" min="0" step="0.01" max="1">
+                            </div>
+                            <input type="submit" value="Edytuj" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        
+            <div class="modal fade" id="editGuaranteedAmountModal" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Edytuj podstawę podatkową</h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <form method="post">
+                            <div class="form-group"> 
+
+                                <label for="getIdTax">Wybierz podatek do edycji:</label>
+                                 <select class="form-control" id="getIdTax" name="getIdTax">
+                                     <?php 
+                                     for($i=0; $i<$countDatas1; $i++){
+                                         echo'<option>'.$idtaxes1[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                           
+                            <div class="form-group"> 
+
+                                 <label for="editGuaranteedAmount">Podaj nową podstawę podatkową:</label>
+                                 <input type="number" class="form-control" id="editGuaranteedAmount" 
+                                        name="editGuaranteedAmount" value="0.00" min="0"  step="0.01">
+                            </div>
+                            <input type="submit" value="Edytuj" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+                            
+           <div class="modal fade" id="editDownPaymentModal" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Edytuj dolną granicę podatku</h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <form method="post">
+                            <div class="form-group"> 
+
+                                <label for="getIdTax">Wybierz podatek do edycji:</label>
+                                 <select class="form-control" id="getIdTax" name="getIdTax">
+                                     <?php 
+                                     for($i=0; $i<$countDatas1; $i++){
+                                         echo'<option>'.$idtaxes1[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                           
+                            <div class="form-group"> 
+                                <label for="editDownPayment">Podaj nową, górną granicę podatku:</label>
+                                 <input type="number" class="form-control" id="editDownPayment" 
+                                        name="editDownPayment" value="0.00" min="0"  step="0.01">
+                            </div>
+                            <input type="submit" value="Edytuj" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        
             
+                                 
+           <div class="modal fade" id="editMaxPaymentModal" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Edytuj górną granicę podatku</h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <form method="post">
+                            <div class="form-group"> 
+
+                                <label for="getIdTax">Wybierz podatek do edycji:</label>
+                                 <select class="form-control" id="getIdTax" name="getIdTax">
+                                     <?php 
+                                     for($i=0; $i<$countDatas1; $i++){
+                                         echo'<option>'.$idtaxes1[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                           
+                            <div class="form-group"> 
+                                <label for="editMaxPayment">Podaj nową, górną granicę podatku:</label>
+                                 <input type="number" class="form-control" id="editMaxPayment" 
+                                        name="editMaxPayment" value="0.00" min="0"  step="0.01">
+                               
+                            </div>
+                            <input type="submit" value="Edytuj" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div> 
+            
+            <div class="modal fade" id="editFreePayModal" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Przypisz nową kwotę wolną</h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <form method="post">
+                            <div class="form-group"> 
+
+                                <label for="getIdTax">Wybierz podatek do edycji:</label>
+                                 <select class="form-control" id="getIdTax" name="getIdTax">
+                                     <?php 
+                                     for($i=0; $i<$countDatas1; $i++){
+                                         echo'<option>'.$idtaxes1[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                           
+                            <div class="form-group"> 
+                                 <label for="editFreePay">Przypisz nową kwotę wolną od podatku:</label>
+                                 <select class="form-control" id="editFreePay" name="editFreePay">
+                                     <?php 
+                                     for($i=0; $i<$countDatasFree; $i++){
+                                         echo'<option>'.$freePay[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                               
+                            </div>
+                            <input type="submit" value="Edytuj" class="btn btn-info btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div> 
+        
+            <div class="modal fade" id="deleteTaxModal" role="dialog">
+                <div class="modal-dialog">
+                  
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Usuń dany podatek</h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <form method="post">
+                            <div class="form-group"> 
+                                <label for="getIdTaxDel">Wybierz podatek do usunięcia:</label>
+                                 <select class="form-control" id="getIdTaxDel" name="getIdTaxDel">
+                                     <?php 
+                                     for($i=0; $i<$countDatas1; $i++){
+                                         echo'<option>'.$idtaxes1[$i].'</option>';
+                                     }
+                                     ?>
+                                 </select>
+                            </div>
+                            <input type="submit" value="Usuń" class="btn btn-danger btn-lg"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    </div>
+                  </div>
+                </div>
+            </div>     
         
             <div class="well" id="tables">
                 <div id="tax-table" class="table-responsive">

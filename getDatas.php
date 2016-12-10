@@ -33,7 +33,7 @@
         //echo $allTaxesRows;
         
         $countDatas = 0;
-        
+        $countDatas1 = 0;
         for($i=1; $i<=$allTaxesRows; $i++){
             
             
@@ -49,6 +49,20 @@
             $maxPayment[$countDatas] = $row['maxPayment'];
             $flagT[$countDatas] = $row['flagT'];
             $freeTaxPayId[$countDatas] = $row['freetaxvalue_idfreetaxvalue'];
+            
+            if($idtaxes[$countDatas]!=NULL){
+                $idtaxes1[$countDatas1]= $idtaxes[$countDatas];
+                $values1[$countDatas1] = $values[$countDatas];
+                $guaranteedAmount1[$countDatas1] = $guaranteedAmount[$countDatas];
+                $downPayment1[$countDatas1] = $downPayment[$countDatas];
+                $maxPayment1[$countDatas1] = $maxPayment[$countDatas];
+                $flagT1[$countDatas1] = $flagT[$countDatas];
+                $freeTaxPayId1[$countDatas1] = $freeTaxPayId[$countDatas];
+                /*echo $countDatas.' '.$idtaxes1[$countDatas1].' '.$values1[$countDatas1].' '.
+                        $guaranteedAmount1[$countDatas1].' '.$downPayment1[$countDatas1].' '.
+                        $maxPayment1[$countDatas1].'<br/>';*/
+                $countDatas1++;
+            }
 
             $result->free();
             $countDatas++;
@@ -172,27 +186,30 @@ if(isset($_POST['incomme'])){
         
         
 
-        
-        for($j=0; $j<$countDatas; $j++){
+        //echo $countDatas1.'<br/>';
+        for($j=0; $j<$countDatas1; $j++){
             
             
-            if ($maxPayment[$j] >= $payment && $downPayment[$j] < $payment)
+            if ($maxPayment1[$j] >= $payment && $downPayment1[$j] < $payment)
                     {//progresja - pośrednie podatki
-                        $prog = ($guaranteedAmount[$j] + ($payment - $downPayment[$j] -
-                        getTaxFreePayment($freeTaxPayId[$j], $connection)) * $values[$j]) - $health;
-                        $taxProg = setProcents($values[$j]);
+                        $prog = ($guaranteedAmount1[$j] + ($payment - $downPayment1[$j] -
+                        getTaxFreePayment($freeTaxPayId1[$j], $connection)) * $values1[$j]) - $health;
+                        $taxProg = setProcents($values1[$j]);
+                        //echo $prog.'<br/>';
                     }
-                    else if ($maxPayment[$j] == 0 && $downPayment[$j] == 0)
+                    else if ($maxPayment1[$j] == 0 && $downPayment1[$j] == 0)
                     {//liniowy podatek
-                        $line = ($guaranteedAmount[$j] + ($payment - $downPayment[$j] -
-                        getTaxFreePayment($freeTaxPayId[$j], $connection)) * $values[$j]) - $health;
-                        $taxLine = setProcents($values[$j]);
+                        $line = ($guaranteedAmount1[$j] + ($payment - $downPayment1[$j] -
+                        getTaxFreePayment($freeTaxPayId1[$j], $connection)) * $values1[$j]) - $health;
+                        $taxLine = setProcents($values1[$j]);
+                        //echo $line.'<br/>';
                     }
-                    else if($maxPayment[$j]==0 && $downPayment[$j] != 0 && $payment>$downPayment[$j])
+                    else if($maxPayment1[$j]==0 && $downPayment1[$j] != 0 && $payment>$downPayment1[$j])
                     {//progresja - najwyższa stawka
-                        $prog = ($guaranteedAmount[$j] + ($payment - $downPayment[$j] -
-                        getTaxFreePayment($freeTaxPayId[$j], $connection)) * $values[$j]) - $health;
-                        $taxProg = setProcents($values[$j]);
+                        $prog = ($guaranteedAmount1[$j] + ($payment - $downPayment1[$j] -
+                        getTaxFreePayment($freeTaxPayId1[$j], $connection)) * $values1[$j]) - $health;
+                        $taxProg = setProcents($values1[$j]);
+                        //echo $prog.'<br/>';
                     }
 
                     if ($prog < 0)

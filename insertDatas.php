@@ -55,7 +55,7 @@ if(isset($_POST['value'])){
                     . "'$maxPayment', '1', '$idFree')");
             
         } else {
-            echo 'W bazie już wpisano podany podatek!';
+           // echo 'W bazie już wpisano podany podatek!';
         }
 
     }catch(Exception $e){
@@ -78,7 +78,7 @@ if(isset($_POST['freePayment'])){
                     . "freePay) VALUES(NULL, '$freePayment')");
             
         } else {
-            echo 'W bazie już wpisano podobną kwotę wolną!';
+            //echo 'W bazie już wpisano podobną kwotę wolną!';
         }
 
     }catch(Exception $e){
@@ -105,7 +105,7 @@ if(isset($_POST['addLogin']) && isset($_POST['addPass'])){
                     . "login, password) VALUES(NULL, '$login', '$pass_hash')");
             
         } else {
-            echo 'W bazie już istnieje dany administrator!';
+            //echo 'W bazie już istnieje dany administrator!';
         }
 
     }catch(Exception $e){
